@@ -1,0 +1,15 @@
+*.pyc
+*.pdf
+
+Part I/__pycache__/
+Part I/alice.txt
+Part I/MLRD Java code/
+
+Part I/NEG/
+Part I/NEG_STEM/
+
+Part I/POS/
+Part I/POS_STEM/
+
+Part I/sample.txt
+
