@@ -145,4 +145,4 @@ print ""
 print "-------"
 print ""
 
-compareSystems(naive_bayes.naiveBayes, svm_classifier.performSVMClassification)
+#compareSystems(naive_bayes.naiveBayes, svm_classifier.performSVMClassification)

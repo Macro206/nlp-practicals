@@ -13,6 +13,10 @@ def calculateLogProbs(trainingSet):
     for (sentiment, fileName, features) in trainingSet:
         isPositive = (sentiment == "POS")
 
+        if shouldUsePresence:
+            featureSet = set(features)
+            features = list(featureSet)
+
         for s in features:
             if isPositive:
                 totalPositiveWords += 1
