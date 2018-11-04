@@ -1,3 +1,4 @@
+from review_loader import shouldUsePresence
 from math import log
 
 ### FUNCTIONS TO CALCULATE PROBABILITIES ###

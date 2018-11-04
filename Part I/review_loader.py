@@ -2,6 +2,7 @@ import os
 
 shouldUseStemmedReviews = False
 shouldUseBigrams = False
+shouldUsePresence = True
 
 ### FUNCTIONS TO LOAD FILES INTO REQUIRED FORMAT ###
 
@@ -29,11 +30,14 @@ def getFeaturesForAllReviews():
 
     if shouldUseStemmedReviews:
         print "Using stemmed reviews..."
-        print ""
 
     if shouldUseBigrams:
         print "Using bigrams..."
-        print ""
+
+    if shouldUsePresence:
+        print "Using presence..."
+
+    print ""
 
     positiveFileList = sorted(list(filter(lambda s: s.endswith(".tag"), os.listdir(positiveDirPath))))
     negativeFileList = sorted(list(filter(lambda s: s.endswith(".tag"), os.listdir(negativeDirPath))))

@@ -1,4 +1,5 @@
 import svmlight
+from review_loader import shouldUsePresence
 import naive_bayes
 
 def getFeatureIndices(data):
@@ -25,8 +26,10 @@ def performSVMClassification(trainingData, testData):
         features = {}
 
         for f in doc[2]:
-            features[f] = 1 if f not in features else features[f] + 1
-            #features[f] = 1
+            if shouldUsePresence:
+                features[f] = 1
+            else:
+                features[f] = 1 if f not in features else features[f] + 1
 
         for k,v in features.items():
             featureVector.append((featureIndices[k],v))
