@@ -25,8 +25,8 @@ def performSVMClassification(trainingData, testData):
         features = {}
 
         for f in doc[2]:
-            #features[f] = 1 if f not in features else features[f] + 1
-            features[f] = 1
+            features[f] = 1 if f not in features else features[f] + 1
+            #features[f] = 1
 
         for k,v in features.items():
             featureVector.append((featureIndices[k],v))

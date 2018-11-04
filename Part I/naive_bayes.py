@@ -108,23 +108,3 @@ def naiveBayes(trainingSet, testSet):
             predictions.append(("NEG", sentiment, fileName))
 
     return predictions
-
-
-### PROGRAM ###
-
-#features = getFeaturesForAllReviews()
-
-#logProbs = calculateLogProbs(features)
-#classProbs = calculateClassProbabilities(features)
-
-#classificationResults = naiveBayes(features, logProbs, classProbs)
-
-#print(classificationResults)
-
-#correctCount = 0
-
-#for (predictedSentiment, actualSentiment, fileName) in classificationResults:
-#    if predictedSentiment == actualSentiment:
-#        correctCount += 1
-
-#print (float(correctCount)/float(2000))

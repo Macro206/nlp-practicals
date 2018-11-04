@@ -1,5 +1,6 @@
 import naive_bayes
 import svm_classifier
+import significance_testing
 import statistics
 
 ### SPLITTING TYPES ###
@@ -37,7 +38,7 @@ def roundRobinSplitting(features):
     return splits
 
 
-### CROSS VALIDATION FOR NAIVE BAYES ###
+### CROSS VALIDATION FOR SPECIFIC SYSTEM ###
 
 def crossValidateForSpecificIndex(splits, testingSplitIndex, func):
     trainingData = []
@@ -73,17 +74,9 @@ def crossValidate(splits, func):
 def crossValidateNaiveBayes():
     features = naive_bayes.getFeaturesForAllReviews()
 
-    consecutiveSplits = consecutiveSplitting(features)
     roundRobinSplits = roundRobinSplitting(features)
 
-    consecutiveScores = crossValidate(consecutiveSplits, naive_bayes.naiveBayes)
     roundRobinScores = crossValidate(roundRobinSplits, naive_bayes.naiveBayes)
-
-    print "Consecutive splitting:"
-    print "Mean: " + str(statistics.mean(consecutiveScores))
-    print "Variance: " + str(statistics.variance(consecutiveScores))
-
-    print ""
 
     print "Round-robin splitting:"
     print "Mean: " + str(statistics.mean(roundRobinScores))
@@ -102,5 +95,55 @@ def crossValidateSVM():
     print "Variance: " + str(statistics.variance(roundRobinScores))
 
 
+### CROSS VALIDATION COMPARING SYSTEMS ###
+
+def runSystemsForSpecificIndex(splits, testingSplitIndex, func1, func2):
+    trainingData = []
+    testData = []
+
+    for i in range(0,10):
+        if i == testingSplitIndex:
+            testData = splits[i]
+        else:
+            trainingData.extend(splits[i])
+
+    classificationResults1 = func1(trainingData, testData)
+    classificationResults2 = func2(trainingData, testData)
+
+    return (classificationResults1, classificationResults2)
+
+
+def compareSystems(func1, func2):
+    s1results = [[] for _ in range(0,10)]
+    s2results = [[] for _ in range(0,10)]
+
+    features = naive_bayes.getFeaturesForAllReviews()
+    roundRobinSplits = roundRobinSplitting(features)
+
+    for i in range(0,len(roundRobinSplits)):
+        (results1, results2) = runSystemsForSpecificIndex(roundRobinSplits, i, func1, func2)
+
+        s1results[i] = results1
+        s2results[i] = results2
+
+    pValues = significance_testing.compareSystems(s1results, s2results)
+
+    print "Comparing systems"
+    print "Got p-values: " + str(pValues)
+
+
+print ""
+
+crossValidateNaiveBayes()
+
+print ""
+print "-------"
+print ""
 
 crossValidateSVM()
+
+print ""
+print "-------"
+print ""
+
+compareSystems(naive_bayes.naiveBayes, svm_classifier.performSVMClassification)
