@@ -1,6 +1,7 @@
 import naive_bayes
 import svm_classifier
 import significance_testing
+import review_loader
 import statistics
 
 ### SPLITTING TYPES ###
@@ -72,27 +73,25 @@ def crossValidate(splits, func):
 
 
 def crossValidateNaiveBayes():
-    features = naive_bayes.getFeaturesForAllReviews()
+    features = review_loader.getFeaturesForAllReviews()
 
     roundRobinSplits = roundRobinSplitting(features)
 
     roundRobinScores = crossValidate(roundRobinSplits, naive_bayes.naiveBayes)
 
-    print "Round-robin splitting:"
+    print "Naive Bayes:"
     print "Mean: " + str(statistics.mean(roundRobinScores))
-    print "Variance: " + str(statistics.variance(roundRobinScores))
 
 
 def crossValidateSVM():
-    features = naive_bayes.getFeaturesForAllReviews()
+    features = review_loader.getFeaturesForAllReviews()
 
     roundRobinSplits = roundRobinSplitting(features)
 
     roundRobinScores = crossValidate(roundRobinSplits, svm_classifier.performSVMClassification)
 
-    print "Round-robin splitting:"
+    print "SVM:"
     print "Mean: " + str(statistics.mean(roundRobinScores))
-    print "Variance: " + str(statistics.variance(roundRobinScores))
 
 
 ### CROSS VALIDATION COMPARING SYSTEMS ###
@@ -117,7 +116,7 @@ def compareSystems(func1, func2):
     s1results = [[] for _ in range(0,10)]
     s2results = [[] for _ in range(0,10)]
 
-    features = naive_bayes.getFeaturesForAllReviews()
+    features = review_loader.getFeaturesForAllReviews()
     roundRobinSplits = roundRobinSplitting(features)
 
     for i in range(0,len(roundRobinSplits)):

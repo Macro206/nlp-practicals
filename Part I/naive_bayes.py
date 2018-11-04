@@ -1,30 +1,4 @@
-import os
 from math import log
-
-### FUNCTIONS TO LOAD FILES INTO REQUIRED FORMAT ###
-
-def getFeaturesFromFile(filePath):
-    with open(filePath) as f:
-        fileString = f.read()
-        features = fileString.split("\n")
-
-    filteredFeatures = list(filter(lambda s: s != '', features))  # TODO: Mention the removal of empty strings
-
-    return filteredFeatures
-
-def getFeaturesForAllReviews():
-    positiveFileList = sorted(list(filter(lambda s: s.endswith(".tag"), os.listdir("./POS"))))
-    negativeFileList = sorted(list(filter(lambda s: s.endswith(".tag"), os.listdir("./NEG"))))
-
-    features = []
-
-    for f in positiveFileList:
-        features.append(("POS", f, getFeaturesFromFile("./POS/" + f)))
-
-    for f in negativeFileList:
-        features.append(("NEG", f, getFeaturesFromFile("./NEG/" + f)))
-
-    return features
 
 ### FUNCTIONS TO CALCULATE PROBABILITIES ###
 
