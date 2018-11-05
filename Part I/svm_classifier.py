@@ -1,5 +1,4 @@
 import svmlight
-from review_loader import shouldUsePresence
 import naive_bayes
 
 def getFeatureIndices(data):
@@ -15,7 +14,7 @@ def getFeatureIndices(data):
     return featureIndices
 
 
-def performSVMClassification(trainingData, testData):
+def performSVMClassification(trainingData, testData, shouldUsePresence):
     featureIndices = getFeatureIndices(trainingData + testData)
 
     formattedTrainingData = []
@@ -67,3 +66,10 @@ def performSVMClassification(trainingData, testData):
         i += 1
 
     return formattedJudgements
+
+
+def performSVMClassificationUsingFrequency(trainingData, testData):
+    return performSVMClassification(trainingData, testData, False)
+
+def performSVMClassificationUsingPresence(trainingData, testData):
+    return performSVMClassification(trainingData, testData, True)

@@ -74,7 +74,7 @@ def crossValidateSVM():
 
     roundRobinSplits = roundRobinSplitting(features)
 
-    roundRobinScores = crossValidate(roundRobinSplits, svm_classifier.performSVMClassification)
+    roundRobinScores = crossValidate(roundRobinSplits, svm_classifier.performSVMClassificationUsingPresence if review_loader.shouldUsePresence else svm_classifier.performSVMClassificationUsingFrequency)
 
     print "SVM:"
     print "Mean: " + str(statistics.mean(roundRobinScores))
@@ -131,4 +131,4 @@ print ""
 print "-------"
 print ""
 
-#compareSystems(naive_bayes.naiveBayes, svm_classifier.performSVMClassification)
+#compareSystems(svm_classifier.performSVMClassificationUsingFrequency, svm_classifier.performSVMClassificationUsingPresence)
