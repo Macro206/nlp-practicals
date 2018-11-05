@@ -4,23 +4,9 @@ import significance_testing
 import review_loader
 import statistics
 
+folds = 10
+
 ### SPLITTING TYPES ###
-
-def consecutiveSplitting(features):
-    positiveFeatures = features[0:1000]
-    negativeFeatures = features[1000:2000]
-
-    splits = []
-
-    for i in range(0,10):
-        splits.append([])
-
-    for i in range(0,1000):
-        splitIndex = int(i/100)
-        splits[splitIndex].append(positiveFeatures[i])
-        splits[splitIndex].append(negativeFeatures[i])
-
-    return splits
 
 def roundRobinSplitting(features):
     positiveFeatures = features[0:1000]
@@ -28,11 +14,11 @@ def roundRobinSplitting(features):
 
     splits = []
 
-    for i in range(0,10):
+    for i in range(0,folds):
         splits.append([])
 
     for i in range(0,1000):
-        splitIndex = i % 10
+        splitIndex = i % folds
         splits[splitIndex].append(positiveFeatures[i])
         splits[splitIndex].append(negativeFeatures[i])
 
@@ -45,7 +31,7 @@ def crossValidateForSpecificIndex(splits, testingSplitIndex, func):
     trainingData = []
     testData = []
 
-    for i in range(0,10):
+    for i in range(0,len(splits)):
         if i == testingSplitIndex:
             testData = splits[i]
         else:
@@ -100,7 +86,7 @@ def runSystemsForSpecificIndex(splits, testingSplitIndex, func1, func2):
     trainingData = []
     testData = []
 
-    for i in range(0,10):
+    for i in range(0,len(splits)):
         if i == testingSplitIndex:
             testData = splits[i]
         else:
@@ -113,11 +99,11 @@ def runSystemsForSpecificIndex(splits, testingSplitIndex, func1, func2):
 
 
 def compareSystems(func1, func2):
-    s1results = [[] for _ in range(0,10)]
-    s2results = [[] for _ in range(0,10)]
-
     features = review_loader.getFeaturesForAllReviews()
     roundRobinSplits = roundRobinSplitting(features)
+
+    s1results = [[] for _ in range(0,len(roundRobinSplits))]
+    s2results = [[] for _ in range(0,len(roundRobinSplits))]
 
     for i in range(0,len(roundRobinSplits)):
         (results1, results2) = runSystemsForSpecificIndex(roundRobinSplits, i, func1, func2)
