@@ -37,6 +37,20 @@ def crossValidateForSpecificIndex(splits, testingSplitIndex, func):
         else:
             trainingData.extend(splits[i])
 
+    if review_loader.shouldUseCutoffs:
+        featureFrequencies = {}
+        for (sentiment, fileName, features) in trainingData:
+            for f in features:
+                featureFrequencies[f] = 1 if f not in featureFrequencies else featureFrequencies[f] + 1
+
+        for i in range(0,len(trainingData)):
+            newFeatures = []
+            for f in trainingData[i][2]:
+                if featureFrequencies[f] >= 4:
+                    newFeatures.append(f)
+
+            trainingData[i] = (trainingData[i][0], trainingData[i][1], newFeatures)
+
     classificationResults = func(trainingData, testData)
 
     totalCorrect = 0
@@ -131,4 +145,4 @@ print ""
 print "-------"
 print ""
 
-#compareSystems(svm_classifier.performSVMClassificationUsingFrequency, svm_classifier.performSVMClassificationUsingPresence)
+compareSystems(naive_bayes.naiveBayes, svm_classifier.performSVMClassificationUsingPresence)

@@ -2,7 +2,8 @@ import os
 
 shouldUseStemmedReviews = False
 shouldUseBigrams = False
-shouldUsePresence = True
+shouldUsePresence = False
+shouldUseCutoffs = False
 
 ### FUNCTIONS TO LOAD FILES INTO REQUIRED FORMAT ###
 
@@ -36,6 +37,9 @@ def getFeaturesForAllReviews():
 
     if shouldUsePresence:
         print "Using presence..."
+
+    if shouldUseCutoffs:
+        print "Using cutoffs..."
 
     print ""
 
