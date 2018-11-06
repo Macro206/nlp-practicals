@@ -2,7 +2,8 @@ import os
 
 shouldUseStemmedReviews = False
 shouldUseBigrams = False
-shouldUsePresence = False
+shouldUseUnigramsAndBigrams = False
+shouldUsePresence = True
 shouldUseCutoffs = False
 
 ### FUNCTIONS TO LOAD FILES INTO REQUIRED FORMAT ###
@@ -20,7 +21,11 @@ def getFeaturesFromFile(filePath):
         for i in range(1,len(filteredFeatures)):
             bigramFeatures.append(filteredFeatures[i-1] + ":" + filteredFeatures[i])
 
-        return bigramFeatures
+        if shouldUseUnigramsAndBigrams:
+            filteredFeatures.extend(bigramFeatures)
+            return filteredFeatures
+        else:
+            return bigramFeatures
 
 
     return filteredFeatures
