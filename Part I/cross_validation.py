@@ -1,7 +1,7 @@
 import naive_bayes
 import svm_classifier
 import significance_testing
-import review_loader
+from review_loader import *
 import statistics
 
 folds = 10
@@ -37,7 +37,7 @@ def crossValidateForSpecificIndex(splits, testingSplitIndex, func):
         else:
             trainingData.extend(splits[i])
 
-    if review_loader.shouldUseCutoffs:
+    if options["shouldUseCutoffs"]:
         featureFrequencies = {}
         for (sentiment, fileName, features) in trainingData:
             for f in features:
@@ -73,7 +73,7 @@ def crossValidate(splits, func):
 
 
 def crossValidateNaiveBayes():
-    features = review_loader.getFeaturesForAllReviews()
+    features = getFeaturesForAllReviews()
 
     roundRobinSplits = roundRobinSplitting(features)
 
@@ -84,11 +84,11 @@ def crossValidateNaiveBayes():
 
 
 def crossValidateSVM():
-    features = review_loader.getFeaturesForAllReviews()
+    features = getFeaturesForAllReviews()
 
     roundRobinSplits = roundRobinSplitting(features)
 
-    roundRobinScores = crossValidate(roundRobinSplits, svm_classifier.performSVMClassificationUsingPresence if review_loader.shouldUsePresence else svm_classifier.performSVMClassificationUsingFrequency)
+    roundRobinScores = crossValidate(roundRobinSplits, svm_classifier.performSVMClassification)
 
     print "SVM:"
     print "Mean: " + str(statistics.mean(roundRobinScores))
@@ -106,14 +106,16 @@ def runSystemsForSpecificIndex(splits, testingSplitIndex, func1, func2):
         else:
             trainingData.extend(splits[i])
 
+    options["shouldUsePresence"] = False
     classificationResults1 = func1(trainingData, testData)
+    options["shouldUsePresence"] = True
     classificationResults2 = func2(trainingData, testData)
 
     return (classificationResults1, classificationResults2)
 
 
 def compareSystems(func1, func2):
-    features = review_loader.getFeaturesForAllReviews()
+    features = getFeaturesForAllReviews()
     roundRobinSplits = roundRobinSplitting(features)
 
     s1results = [[] for _ in range(0,len(roundRobinSplits))]
@@ -145,4 +147,4 @@ print ""
 print "-------"
 print ""
 
-#compareSystems(naive_bayes.naiveBayes, svm_classifier.performSVMClassificationUsingPresence)
+#compareSystems(svm_classifier.performSVMClassification, svm_classifier.performSVMClassification)

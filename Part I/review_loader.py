@@ -1,10 +1,12 @@
 import os
 
-shouldUseStemmedReviews = False
-shouldUseBigrams = False
-shouldUseUnigramsAndBigrams = False
-shouldUsePresence = True
-shouldUseCutoffs = False
+options = {
+    "shouldUseStemmedReviews": False,
+    "shouldUseBigrams": False,
+    "shouldUseUnigramsAndBigrams": False,
+    "shouldUsePresence": True,
+    "shouldUseCutoffs": False,
+}
 
 ### FUNCTIONS TO LOAD FILES INTO REQUIRED FORMAT ###
 
@@ -15,13 +17,13 @@ def getFeaturesFromFile(filePath):
 
     filteredFeatures = list(filter(lambda s: s != '', features))  # TODO: Mention the removal of empty strings
 
-    if shouldUseBigrams:
+    if options["shouldUseBigrams"]:
         bigramFeatures = []
 
         for i in range(1,len(filteredFeatures)):
             bigramFeatures.append(filteredFeatures[i-1] + ":" + filteredFeatures[i])
 
-        if shouldUseUnigramsAndBigrams:
+        if options["shouldUseUnigramsAndBigrams"]:
             filteredFeatures.extend(bigramFeatures)
             return filteredFeatures
         else:
@@ -31,19 +33,19 @@ def getFeaturesFromFile(filePath):
     return filteredFeatures
 
 def getFeaturesForAllReviews():
-    positiveDirPath = "./POS_STEM" if shouldUseStemmedReviews else "./POS"
-    negativeDirPath = "./NEG_STEM" if shouldUseStemmedReviews else "./NEG"
+    positiveDirPath = "./POS_STEM" if options["shouldUseStemmedReviews"] else "./POS"
+    negativeDirPath = "./NEG_STEM" if options["shouldUseStemmedReviews"] else "./NEG"
 
-    if shouldUseStemmedReviews:
+    if options["shouldUseStemmedReviews"]:
         print "Using stemmed reviews..."
 
-    if shouldUseBigrams:
+    if options["shouldUseBigrams"]:
         print "Using bigrams..."
 
-    if shouldUsePresence:
+    if options["shouldUsePresence"]:
         print "Using presence..."
 
-    if shouldUseCutoffs:
+    if options["shouldUseCutoffs"]:
         print "Using cutoffs..."
 
     print ""

@@ -1,4 +1,4 @@
-from review_loader import shouldUsePresence
+from review_loader import options
 from math import log
 
 ### FUNCTIONS TO CALCULATE PROBABILITIES ###
@@ -13,7 +13,7 @@ def calculateLogProbs(trainingSet):
     for (sentiment, fileName, features) in trainingSet:
         isPositive = (sentiment == "POS")
 
-        if shouldUsePresence:
+        if options["shouldUsePresence"]:
             featureSet = set(features)
             features = list(featureSet)
 
