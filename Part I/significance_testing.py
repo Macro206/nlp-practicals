@@ -13,6 +13,8 @@ def factorial(n):
 def getPValue(plus, minus, null):
     getcontext().prec = 10000
 
+    print str(null) + " : " + str(plus) + " : " + str(minus)
+
     q = 0.5
     N = int(2*(math.ceil(float(null)/2.0)) + plus + minus)
     k = int(math.ceil(float(null)/2.0) + min(plus, minus))
@@ -20,6 +22,8 @@ def getPValue(plus, minus, null):
     acc = Decimal(0)
 
     for i in range(0,k+1):
+        #print i
+
         nCr = factorial(N)/(factorial(i)*factorial(N-i))
 
         acc += Decimal(nCr) * Decimal(q ** i) * Decimal((1-q) ** (N-i))
@@ -35,6 +39,10 @@ def compareResults(s1results, s2results):
     minus = 0
     null = 0
 
+    oneSuccesses = 0
+    twoSuccesses = 0
+    total = 0
+
     for i in range(0,len(s1results)):
         (predictedSentiment1, actualSentiment1, file1) = s1results[i]
         (predictedSentiment2, actualSentiment2, file2) = s2results[i]
@@ -45,18 +53,24 @@ def compareResults(s1results, s2results):
 
         if (predictedSentiment1 == actualSentiment1) and (predictedSentiment2 != actualSentiment2):
             plus += 1
+            oneSuccesses += 1
         elif (predictedSentiment1 != actualSentiment1) and (predictedSentiment2 == actualSentiment2):
             minus += 1
+            twoSuccesses += 1
         else:
+            if (predictedSentiment1 == actualSentiment1):
+                oneSuccesses += 1
+                twoSuccesses += 1
             null += 1
 
+        total += 1
+
+    print "System 1 Accuracy:"
+    print float(oneSuccesses)/float(total)
+    print ""
+
+    print "System 2 Accuracy:"
+    print float(twoSuccesses)/float(total)
+    print ""
+
     return getPValue(plus, minus, null)
-
-
-def compareSystems(s1results, s2results):
-    pValues = []
-
-    for i in range(0,len(s1results)):
-        pValues.append(compareResults(s1results[i], s2results[i]))
-
-    return pValues

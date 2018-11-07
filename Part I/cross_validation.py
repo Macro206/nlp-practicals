@@ -96,7 +96,7 @@ def crossValidateSVM():
 
 ### CROSS VALIDATION COMPARING SYSTEMS ###
 
-def runSystemsForSpecificIndex(splits, testingSplitIndex, func1, func2):
+def getCrossValidatedJudgementsForSpecificIndex(splits, testingSplitIndex, func):
     trainingData = []
     testData = []
 
@@ -106,31 +106,46 @@ def runSystemsForSpecificIndex(splits, testingSplitIndex, func1, func2):
         else:
             trainingData.extend(splits[i])
 
-    options["shouldUsePresence"] = False
-    classificationResults1 = func1(trainingData, testData)
-    options["shouldUsePresence"] = True
-    classificationResults2 = func2(trainingData, testData)
+    if options["shouldUseCutoffs"]:
+        featureFrequencies = {}
+        for (sentiment, fileName, features) in trainingData:
+            for f in features:
+                featureFrequencies[f] = 1 if f not in featureFrequencies else featureFrequencies[f] + 1
 
-    return (classificationResults1, classificationResults2)
+        for i in range(0,len(trainingData)):
+            newFeatures = []
+            for f in trainingData[i][2]:
+                if featureFrequencies[f] >= 4:
+                    newFeatures.append(f)
 
+            trainingData[i] = (trainingData[i][0], trainingData[i][1], newFeatures)
 
-def compareSystems(func1, func2):
+    classificationResults = func(trainingData, testData)
+
+    return classificationResults
+
+def getCrossValidatedJudgements(splits, func):
+    results = []
+
+    for i in range(0,len(splits)):
+        results.extend(getCrossValidatedJudgementsForSpecificIndex(splits, i, func))
+
+    return results
+
+def getAggregatedJudgementsForSystem(func):
     features = getFeaturesForAllReviews()
     roundRobinSplits = roundRobinSplitting(features)
+    judgements = getCrossValidatedJudgements(roundRobinSplits, func)
+    return judgements
 
-    s1results = [[] for _ in range(0,len(roundRobinSplits))]
-    s2results = [[] for _ in range(0,len(roundRobinSplits))]
+def compareSystems(func1, func2):
+    judgements1 = getAggregatedJudgementsForSystem(func1)
+    judgements2 = getAggregatedJudgementsForSystem(func2)
 
-    for i in range(0,len(roundRobinSplits)):
-        (results1, results2) = runSystemsForSpecificIndex(roundRobinSplits, i, func1, func2)
-
-        s1results[i] = results1
-        s2results[i] = results2
-
-    pValues = significance_testing.compareSystems(s1results, s2results)
+    pValue = significance_testing.compareResults(judgements1, judgements2)
 
     print "Comparing systems"
-    print "Got p-values: " + str(pValues)
+    print "Got p-value: " + str(pValue)
 
 
 print "Options: "
@@ -149,4 +164,4 @@ print ""
 print "-------"
 print ""
 
-#compareSystems(svm_classifier.performSVMClassification, svm_classifier.performSVMClassification)
+compareSystems(naive_bayes.naiveBayes, svm_classifier.performSVMClassification)
