@@ -2,9 +2,9 @@ import os
 
 options = {
     "shouldUseStemmedReviews": False,
-    "shouldUseBigrams": False,
-    "shouldUseUnigramsAndBigrams": False,
-    "shouldUsePresence": True,
+    "shouldUseBigrams": True,
+    "shouldUseUnigramsAndBigrams": True,
+    "shouldUsePresence": False,
     "shouldUseCutoffs": False,
 }
 

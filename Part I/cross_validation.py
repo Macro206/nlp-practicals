@@ -133,6 +133,8 @@ def compareSystems(func1, func2):
     print "Got p-values: " + str(pValues)
 
 
+print "Options: "
+print options
 print ""
 
 crossValidateNaiveBayes()

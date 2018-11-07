@@ -11,7 +11,7 @@ def factorial(n):
 
 
 def getPValue(plus, minus, null):
-    getcontext().prec = 2000
+    getcontext().prec = 10000
 
     q = 0.5
     N = int(2*(math.ceil(float(null)/2.0)) + plus + minus)
