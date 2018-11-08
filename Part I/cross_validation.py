@@ -139,7 +139,10 @@ def getAggregatedJudgementsForSystem(func):
     return judgements
 
 def compareSystems(func1, func2):
+    options["shouldUsePresence"] = True
     judgements1 = getAggregatedJudgementsForSystem(func1)
+    options["shouldUseBigrams"] = True
+    options["shouldUseUnigramsAndBigrams"] = True
     judgements2 = getAggregatedJudgementsForSystem(func2)
 
     pValue = significance_testing.compareResults(judgements1, judgements2)
@@ -152,16 +155,17 @@ print "Options: "
 print options
 print ""
 
-crossValidateNaiveBayes()
+#crossValidateNaiveBayes()
 
-print ""
-print "-------"
-print ""
+#print ""
+#print "-------"
+#print ""
 
-crossValidateSVM()
+#crossValidateSVM()
 
-print ""
-print "-------"
-print ""
+#print ""
+#print "-------"
+#print ""
 
-compareSystems(naive_bayes.naiveBayes, svm_classifier.performSVMClassification)
+#compareSystems(naive_bayes.naiveBayes, naive_bayes.naiveBayes)
+compareSystems(svm_classifier.performSVMClassification, svm_classifier.performSVMClassification)
