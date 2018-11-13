@@ -13,5 +13,10 @@ Part I/POS_STEM/
 
 Part I/sample.txt
 
+Part II/__pycache__/
+
+Part II/NEG/
+Part II/POS/
+
 Packages/*
 
