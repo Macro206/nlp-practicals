@@ -40,13 +40,13 @@ def generateDoc2VecModel():
     print("Data imported")
 
     taggedDocuments = [TaggedDocument(doc, [i+1]) for i,doc in enumerate(trainingData)]
-    model = Doc2Vec(taggedDocuments, dm=1, vector_size=100, max_epochs=10)
+    model = Doc2Vec(taggedDocuments, dm=0, vector_size=100, negative=5, hs=0, min_count=2, sample=0, max_epochs=20)
 
-    model.save("/Users/Matteo/Desktop/doc2vec_models/model1")
+    model.save("/Users/Matteo/Desktop/doc2vec_models/model2")
 
 
 def performDoc2VecClassification(trainingData, testData):
-    doc2vecModel = Doc2Vec.load("/Users/Matteo/Desktop/doc2vec_models/model1")
+    doc2vecModel = Doc2Vec.load("/Users/Matteo/Desktop/doc2vec_models/model2")
 
     trainingFeatureVectors = [(1 if doc[0] == 'POS' else -1, doc2vecModel.infer_vector(doc[2])) for doc in trainingData]
     testFeatureVectors = [(0, doc2vecModel.infer_vector(doc[2])) for doc in testData]
