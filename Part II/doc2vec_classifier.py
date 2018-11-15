@@ -46,7 +46,7 @@ def generateDoc2VecModel():
 
 
 def performDoc2VecClassification(trainingData, testData):
-    doc2vecModel = Doc2Vec.load("/Users/Matteo/Desktop/doc2vec_model")
+    doc2vecModel = Doc2Vec.load("/Users/Matteo/Desktop/doc2vec_models/model1")
 
     trainingFeatureVectors = [(1 if doc[0] == 'POS' else -1, doc2vecModel.infer_vector(doc[2])) for doc in trainingData]
     testFeatureVectors = [(0, doc2vecModel.infer_vector(doc[2])) for doc in testData]
