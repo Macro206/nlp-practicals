@@ -1,33 +1,38 @@
-import numpy as np
-import statsmodels.api as sm
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from review_loader import getFeaturesForAllReviews
+import svmlight
 
-def logistic_predictor_from_data(train_targets, train_regressors):
-    logit = sm.Logit(train_targets, train_regressors)
-    predictor = logit.fit(disp=0)
-    return predictor
-
-def performDoc2VecClassification(trainingData, testData):
+def trainModel(trainingData):
     taggedDocuments = [TaggedDocument(doc[2], [doc[1]]) for i,doc in enumerate(trainingData)]
     model = Doc2Vec(taggedDocuments, dm=1, vector_size=100, max_epochs=10)
 
-    train_targets = [1.0 if doc[0] == 'POS' else 0.0 for doc in trainingData]
+    return model
 
-    train_regressors = [model.docvecs[doc[1]] for doc in trainingData]
-    train_regressors = sm.add_constant(train_regressors)
+def performDoc2VecClassification(trainingData, testData):
+    doc2vecModel = trainModel(trainingData)
 
-    predictor = logistic_predictor_from_data(train_targets, train_regressors)
+    trainingFeatureVectors = [(1 if doc[0] == 'POS' else -1, doc2vecModel.infer_vector(doc[2])) for doc in trainingData]
+    testFeatureVectors = [(0, doc2vecModel.infer_vector(doc[2])) for doc in testData]
 
-    test_regressors = [model.infer_vector(doc[2]) for doc in testData]
-    test_regressors = sm.add_constant(test_regressors)
+    formattedTrainingFeatureVectors = [(v[0], [(i+1,f) for i,f in enumerate(v[1])]) for v in trainingFeatureVectors]
+    formattedTestFeatureVectors = [(v[0], [(i+1,f) for i,f in enumerate(v[1])]) for v in testFeatureVectors]
 
-    test_predictions = predictor.predict(test_regressors)
-    print(np.rint(test_predictions))
-    corrects = sum(np.rint(test_predictions) == [1.0 if doc[0] == 'POS' else 0.0 for doc in testData])
-    performance = float(corrects) / len(test_predictions)
+    svmModel = svmlight.learn(formattedTrainingFeatureVectors)
+    judgements = svmlight.classify(svmModel, formattedTestFeatureVectors)
 
-    print(performance)
+    nCorrect = 0
+
+    i = 0
+    for (sentiment, fileName, features) in testData:
+        judgement = "POS" if judgements[i] > 0 else "NEG"
+
+        if judgement == sentiment:
+            nCorrect += 1
+
+        i += 1
+
+    print(float(nCorrect)/float(len(judgements)))
+
 
 
 
