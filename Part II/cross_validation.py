@@ -1,6 +1,6 @@
 import naive_bayes
 import svm_classifier
-import significance_testing
+import permutation_test
 from review_loader import *
 import statistics
 
@@ -139,13 +139,10 @@ def getAggregatedJudgementsForSystem(func):
     return judgements
 
 def compareSystems(func1, func2):
-    options["shouldUsePresence"] = True
     judgements1 = getAggregatedJudgementsForSystem(func1)
-    options["shouldUseBigrams"] = True
-    options["shouldUseUnigramsAndBigrams"] = True
     judgements2 = getAggregatedJudgementsForSystem(func2)
 
-    pValue = significance_testing.compareResults(judgements1, judgements2)
+    pValue = permutation_test.compareResults(judgements1, judgements2)
 
     print "Comparing systems"
     print "Got p-value: " + str(pValue)
@@ -167,5 +164,4 @@ print ""
 #print "-------"
 #print ""
 
-#compareSystems(naive_bayes.naiveBayes, naive_bayes.naiveBayes)
-compareSystems(svm_classifier.performSVMClassification, svm_classifier.performSVMClassification)
+compareSystems(naive_bayes.naiveBayes, naive_bayes.naiveBayes)
