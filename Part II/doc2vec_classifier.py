@@ -34,15 +34,30 @@ def importData():
 
     return docs
 
+def importDataTokenized():
+    trainingDataDirectory = '/Users/Matteo/Desktop/doc2vec_training_data/'
+
+    folderList = os.listdir(trainingDataDirectory)
+
+    reviews = []
+
+    for fileName in folderList:
+        with open(trainingDataDirectory + fileName, 'r') as file:
+            reviews.append(filter(lambda x: x != '', file.read().split('\n')))
+
+    return reviews
+
+
 def generateDoc2VecModel():
-    trainingData = importData()
+    trainingData = importDataTokenized()
 
     print("Data imported")
 
     taggedDocuments = [TaggedDocument(doc, [i+1]) for i,doc in enumerate(trainingData)]
-    model = Doc2Vec(taggedDocuments, dm=0, vector_size=100, negative=5, hs=0, min_count=2, sample=0, max_epochs=20)
+    model = Doc2Vec(taggedDocuments, dm=1, vector_size=100, max_epochs=10)
+    #model = Doc2Vec(taggedDocuments, dm=0, vector_size=100, negative=5, hs=0, min_count=2, sample=0, max_epochs=20)
 
-    model.save("/Users/Matteo/Desktop/doc2vec_models/model2")
+    model.save("/Users/Matteo/Desktop/doc2vec_models/model3")
 
 
 def performDoc2VecClassification(trainingData, testData):
@@ -71,16 +86,16 @@ def performDoc2VecClassification(trainingData, testData):
     print(float(nCorrect)/float(len(judgements)))
 
 
-generateDoc2VecModel()
+# generateDoc2VecModel()
 
-# features = getFeaturesForAllReviews()
-#
-# trainingSplit = []
-# testSplit = []
-#
-# trainingSplit.extend(features[0:900])
-# trainingSplit.extend(features[1000:1900])
-# testSplit.extend(features[900:1000])
-# testSplit.extend(features[1900:2000])
-#
-# performDoc2VecClassification(features[0:1800], features[1800:2000])
+features = getFeaturesForAllReviews()
+
+trainingSplit = []
+testSplit = []
+
+trainingSplit.extend(features[0:900])
+trainingSplit.extend(features[1000:1900])
+testSplit.extend(features[900:1000])
+testSplit.extend(features[1900:2000])
+
+performDoc2VecClassification(features[0:1800], features[1800:2000])
