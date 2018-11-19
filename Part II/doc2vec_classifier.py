@@ -54,10 +54,10 @@ def generateDoc2VecModel():
     print("Data imported")
 
     taggedDocuments = [TaggedDocument(doc, [i+1]) for i,doc in enumerate(trainingData)]
-    model = Doc2Vec(taggedDocuments, dm=1, vector_size=100, max_epochs=10)
+    model = Doc2Vec(taggedDocuments, dm=1)
     #model = Doc2Vec(taggedDocuments, dm=0, vector_size=100, negative=5, hs=0, min_count=2, sample=0, max_epochs=20)
 
-    model.save("/Users/Matteo/Desktop/doc2vec_models/model3")
+    model.save("/Users/Matteo/Desktop/doc2vec_models/model2")
 
 
 def performDoc2VecClassification(trainingData, testData):
@@ -72,30 +72,29 @@ def performDoc2VecClassification(trainingData, testData):
     svmModel = svmlight.learn(formattedTrainingFeatureVectors)
     judgements = svmlight.classify(svmModel, formattedTestFeatureVectors)
 
-    nCorrect = 0
+    predictions = []
 
     i = 0
     for (sentiment, fileName, features) in testData:
         judgement = "POS" if judgements[i] > 0 else "NEG"
 
-        if judgement == sentiment:
-            nCorrect += 1
+        predictions.append((judgement, sentiment, fileName))
 
         i += 1
 
-    print(float(nCorrect)/float(len(judgements)))
+    return predictions
 
 
 # generateDoc2VecModel()
 
-features = getFeaturesForAllReviews()
-
-trainingSplit = []
-testSplit = []
-
-trainingSplit.extend(features[0:900])
-trainingSplit.extend(features[1000:1900])
-testSplit.extend(features[900:1000])
-testSplit.extend(features[1900:2000])
-
-performDoc2VecClassification(features[0:1800], features[1800:2000])
+# features = getFeaturesForAllReviews()
+#
+# trainingSplit = []
+# testSplit = []
+#
+# trainingSplit.extend(features[0:900])
+# trainingSplit.extend(features[1000:1900])
+# testSplit.extend(features[900:1000])
+# testSplit.extend(features[1900:2000])
+#
+# performDoc2VecClassification(features[0:1800], features[1800:2000])

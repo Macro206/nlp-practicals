@@ -1,5 +1,6 @@
 import naive_bayes
 import svm_classifier
+import doc2vec_classifier
 import permutation_test
 from review_loader import *
 import statistics
@@ -94,6 +95,37 @@ def crossValidateSVM():
     print "Mean: " + str(statistics.mean(roundRobinScores))
 
 
+def crossValidateDoc2Vec():
+    features = getFeaturesForAllReviews()
+
+    roundRobinSplits = roundRobinSplitting(features)
+
+    roundRobinScores = crossValidate(roundRobinSplits, doc2vec_classifier.performDoc2VecClassification)
+
+    print "Doc2Vec:"
+    print "Mean: " + str(statistics.mean(roundRobinScores))
+
+
+def tuneParamsForDoc2Vec():
+    features = getFeaturesForAllReviews()
+
+    roundRobinSplits = roundRobinSplitting(features)
+
+    validationCorpus = roundRobinSplits[0]
+    trainingCorpus = [review for split in roundRobinSplits[1:] for review in split]
+
+    classificationResults = doc2vec_classifier.performDoc2VecClassification(trainingCorpus, validationCorpus)
+
+    totalCorrect = 0
+
+    for i in range(0,len(classificationResults)):
+        if classificationResults[i][0] == classificationResults[i][1]:
+            totalCorrect += 1
+
+    print "Doc2Vec:"
+    print "Score: " + str(float(totalCorrect)/float(len(classificationResults)))
+
+
 ### CROSS VALIDATION COMPARING SYSTEMS ###
 
 def getCrossValidatedJudgementsForSpecificIndex(splits, testingSplitIndex, func):
@@ -164,4 +196,6 @@ print ""
 #print "-------"
 #print ""
 
-compareSystems(naive_bayes.naiveBayes, naive_bayes.naiveBayes)
+#compareSystems(naive_bayes.naiveBayes, naive_bayes.naiveBayes)
+
+tuneParamsForDoc2Vec()
