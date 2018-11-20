@@ -220,6 +220,22 @@ def findMostConfidentlyIncorrect(judgements):
 
     print(judgement)
 
+def testFuncOnAmazonDataset(func):
+    amazonDocuments = getFeaturesForAllAmazonReviews()
+    imdbTrainingSplits = roundRobinSplitting(getFeaturesForAllReviews())
+    imdbTrainingDocuments = [review for split in imdbTrainingSplits[1:] for review in split]
+
+    classificationResults = func(imdbTrainingDocuments, amazonDocuments)
+
+    totalCorrect = 0
+
+    for i in range(0,len(classificationResults)):
+        if classificationResults[i][0] == classificationResults[i][1]:
+            totalCorrect += 1
+
+    print "Amazon dataset:"
+    print "Score: " + str(float(totalCorrect)/float(len(classificationResults)))
+
 
 print "Options: "
 print options
@@ -242,13 +258,16 @@ print ""
 
 #saveDoc2VecResults()
 
-judgements = loadDoc2VecResults()
+# judgements = loadDoc2VecResults()
+#
+# totalCorrect = 0
+# for j in judgements:
+#     if judgementIsCorrect(j):
+#         totalCorrect += 1
+#
+# print(float(totalCorrect)/float(len(judgements)))
+#
+# findMostConfidentlyIncorrect(judgements)
 
-totalCorrect = 0
-for j in judgements:
-    if judgementIsCorrect(j):
-        totalCorrect += 1
-
-print(float(totalCorrect)/float(len(judgements)))
-
-findMostConfidentlyIncorrect(judgements)
+testFuncOnAmazonDataset(naive_bayes.naiveBayes)
+testFuncOnAmazonDataset(doc2vec_classifier.performDoc2VecClassification)

@@ -62,3 +62,20 @@ def getFeaturesForAllReviews():
         features.append(("NEG", f, getFeaturesFromFile(negativeDirPath + "/" + f)))
 
     return features
+
+def getFeaturesForAllAmazonReviews():
+    positiveDirPath = '/Users/Matteo/Desktop/amazon_test_data/POS'
+    negativeDirPath = '/Users/Matteo/Desktop/amazon_test_data/NEG'
+
+    positiveFileList = sorted(list(filter(lambda s: s.endswith(".conll"), os.listdir(positiveDirPath))))
+    negativeFileList = sorted(list(filter(lambda s: s.endswith(".conll"), os.listdir(negativeDirPath))))
+
+    features = []
+
+    for f in positiveFileList:
+        features.append(("POS", 'pos_' + f, getFeaturesFromFile(positiveDirPath + "/" + f)))
+
+    for f in negativeFileList:
+        features.append(("NEG", 'neg_' + f, getFeaturesFromFile(negativeDirPath + "/" + f)))
+
+    return features
