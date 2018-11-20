@@ -23,7 +23,7 @@ def roundRobinSplitting(features):
         splits[splitIndex].append(positiveFeatures[i])
         splits[splitIndex].append(negativeFeatures[i])
 
-    return splits
+    return splits[1:]  # We discard the validation corpus
 
 
 ### CROSS VALIDATION FOR SPECIFIC SYSTEM ###
@@ -161,6 +161,7 @@ def getCrossValidatedJudgements(splits, func):
 
     for i in range(0,len(splits)):
         results.extend(getCrossValidatedJudgementsForSpecificIndex(splits, i, func))
+        print("Index " + str(i) + " concluded")
 
     return results
 
@@ -196,6 +197,5 @@ print ""
 #print "-------"
 #print ""
 
-#compareSystems(naive_bayes.naiveBayes, naive_bayes.naiveBayes)
-
-tuneParamsForDoc2Vec()
+#compareSystems(naive_bayes.naiveBayes, doc2vec_classifier.performDoc2VecClassification)
+crossValidateDoc2Vec()
