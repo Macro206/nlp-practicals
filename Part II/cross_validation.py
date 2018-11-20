@@ -236,6 +236,17 @@ def testFuncOnAmazonDataset(func):
     print "Amazon dataset:"
     print "Score: " + str(float(totalCorrect)/float(len(classificationResults)))
 
+    return classificationResults
+
+def compareSystemsOnAmazonDataset(func1, func2):
+    judgements1 = testFuncOnAmazonDataset(func1)
+    judgements2 = testFuncOnAmazonDataset(func2)
+
+    pValue = permutation_test.compareResults(judgements1, judgements2)
+
+    print "Comparing systems"
+    print "Got p-value: " + str(pValue)
+
 
 print "Options: "
 print options
@@ -269,5 +280,4 @@ print ""
 #
 # findMostConfidentlyIncorrect(judgements)
 
-testFuncOnAmazonDataset(naive_bayes.naiveBayes)
-testFuncOnAmazonDataset(doc2vec_classifier.performDoc2VecClassification)
+compareSystemsOnAmazonDataset(naive_bayes.naiveBayes, doc2vec_classifier.performDoc2VecClassification)
