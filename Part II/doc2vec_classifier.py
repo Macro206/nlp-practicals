@@ -93,4 +93,26 @@ def performDoc2VecClassification(trainingData, testData):
     return predictions
 
 
+def performDoc2VecJudgement(trainingData, testData):
+    doc2vecModel = Doc2Vec.load("/Users/Matteo/Desktop/doc2vec_models/final_model")
+
+    trainingFeatureVectors = [(1 if doc[0] == 'POS' else -1, doc2vecModel.infer_vector(doc[2])) for doc in trainingData]
+    testFeatureVectors = [(0, doc2vecModel.infer_vector(doc[2])) for doc in testData]
+
+    formattedTrainingFeatureVectors = [(v[0], [(i+1,f) for i,f in enumerate(v[1])]) for v in trainingFeatureVectors]
+    formattedTestFeatureVectors = [(v[0], [(i+1,f) for i,f in enumerate(v[1])]) for v in testFeatureVectors]
+
+    svmModel = svmlight.learn(formattedTrainingFeatureVectors)
+    judgements = svmlight.classify(svmModel, formattedTestFeatureVectors)
+
+    predictions = []
+
+    i = 0
+    for (sentiment, fileName, features) in testData:
+        predictions.append((judgements[i], sentiment, fileName))
+
+        i += 1
+
+    return predictions
+
 # generateDoc2VecModel()

@@ -181,6 +181,46 @@ def compareSystems(func1, func2):
     print "Got p-value: " + str(pValue)
 
 
+### DOC2VEC INVESTIGATION ###
+
+def judgementIsCorrect(j):
+    return (j[0] > 0 and j[1] == 'POS') or (j[0] <= 0 and j[1] == 'NEG')
+
+def saveDoc2VecResults():
+    judgements = getAggregatedJudgementsForSystem(doc2vec_classifier.performDoc2VecJudgement)
+
+    with open('./doc2vec_judgements.txt', 'w') as f:
+        for (judgement, actualSentiment, fileName) in judgements:
+            f.write(str(judgement) + ',' + actualSentiment + ',' + fileName + '\n')
+
+def loadDoc2VecResults():
+    with open('./doc2vec_judgements.txt', 'r') as f:
+        lines = f.read().split('\n')
+
+        judgements = []
+
+        for l in lines:
+            if l == '':
+                continue
+
+            components = l.split(',')
+            judgements.append((float(components[0]), components[1], components[2]))
+
+    return judgements
+
+def findMostConfidentlyIncorrect(judgements):
+    judgement = None
+    highestConfidence = 0
+
+    for (j, s, f) in judgements:
+        if not judgementIsCorrect((j,s,f)):
+            if abs(j) > highestConfidence:
+                judgement = (j,s,f)
+                highestConfidence = abs(j)
+
+    print(judgement)
+
+
 print "Options: "
 print options
 print ""
@@ -198,4 +238,17 @@ print ""
 #print ""
 
 #compareSystems(naive_bayes.naiveBayes, doc2vec_classifier.performDoc2VecClassification)
-crossValidateDoc2Vec()
+#crossValidateDoc2Vec()
+
+#saveDoc2VecResults()
+
+judgements = loadDoc2VecResults()
+
+totalCorrect = 0
+for j in judgements:
+    if judgementIsCorrect(j):
+        totalCorrect += 1
+
+print(float(totalCorrect)/float(len(judgements)))
+
+findMostConfidentlyIncorrect(judgements)
