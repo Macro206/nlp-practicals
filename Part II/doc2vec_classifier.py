@@ -1,5 +1,6 @@
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from gensim.utils import tokenize
+from time import time
 from review_loader import getFeaturesForAllReviews
 import svmlight
 import os
@@ -53,15 +54,22 @@ def generateDoc2VecModel():
 
     print("Data imported")
 
-    taggedDocuments = [TaggedDocument(doc, [i+1]) for i,doc in enumerate(trainingData)]
-    model = Doc2Vec(taggedDocuments, dm=1)
-    #model = Doc2Vec(taggedDocuments, dm=0, vector_size=100, negative=5, hs=0, min_count=2, sample=0, max_epochs=20)
+    start_time = time()
 
-    model.save("/Users/Matteo/Desktop/doc2vec_models/model2")
+    taggedDocuments = [TaggedDocument(doc, [i+1]) for i,doc in enumerate(trainingData)]
+    model = Doc2Vec(taggedDocuments, dm=0, vector_size=100, epochs=10, window=5, hs=0, negative=20)
+
+    model.save("/Users/Matteo/Desktop/doc2vec_models/sample")
+
+    end_time = time()
+
+    dt = int(end_time - start_time)
+
+    print("Time taken: " + str(dt/60) + str(":") + str(dt%60))
 
 
 def performDoc2VecClassification(trainingData, testData):
-    doc2vecModel = Doc2Vec.load("/Users/Matteo/Desktop/doc2vec_models/model2")
+    doc2vecModel = Doc2Vec.load("/Users/Matteo/Desktop/doc2vec_models/final_model")
 
     trainingFeatureVectors = [(1 if doc[0] == 'POS' else -1, doc2vecModel.infer_vector(doc[2])) for doc in trainingData]
     testFeatureVectors = [(0, doc2vecModel.infer_vector(doc[2])) for doc in testData]
@@ -86,15 +94,3 @@ def performDoc2VecClassification(trainingData, testData):
 
 
 # generateDoc2VecModel()
-
-# features = getFeaturesForAllReviews()
-#
-# trainingSplit = []
-# testSplit = []
-#
-# trainingSplit.extend(features[0:900])
-# trainingSplit.extend(features[1000:1900])
-# testSplit.extend(features[900:1000])
-# testSplit.extend(features[1900:2000])
-#
-# performDoc2VecClassification(features[0:1800], features[1800:2000])
