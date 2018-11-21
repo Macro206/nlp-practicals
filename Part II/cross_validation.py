@@ -247,6 +247,34 @@ def compareSystemsOnAmazonDataset(func1, func2, dataset):
     print "Comparing systems"
     print "Got p-value: " + str(pValue)
 
+def compareSystemsOnAmazonDatasets(datasets_to_test):
+    for dataset in datasets_to_test:
+        print("")
+        print("Testing Naive Bayes on dataset: " + dataset)
+        testFuncOnAmazonDataset(naive_bayes.naiveBayes, dataset)
+
+    print("")
+    print("-----")
+    print("")
+
+    options['shouldUsePresence'] = True
+
+    for dataset in datasets_to_test:
+        print("")
+        print("Testing SVM with presence on dataset: " + dataset)
+        testFuncOnAmazonDataset(svm_classifier.performSVMClassification, dataset)
+
+    options['shouldUsePresence'] = False
+
+    print("")
+    print("-----")
+    print("")
+
+    for dataset in datasets_to_test:
+        print("")
+        print("Testing Doc2Vec on dataset: " + dataset)
+        testFuncOnAmazonDataset(doc2vec_classifier.performDoc2VecClassification, dataset)
+
 
 print "Options: "
 print options
@@ -280,5 +308,6 @@ print ""
 #
 # findMostConfidentlyIncorrect(judgements)
 
-options['shouldUsePresence'] = True
-compareSystemsOnAmazonDataset(svm_classifier.performSVMClassification, doc2vec_classifier.performDoc2VecClassification, "food")
+compareSystemsOnAmazonDatasets(['office'])
+
+#compareSystemsOnAmazonDataset(svm_classifier.performSVMClassification, doc2vec_classifier.performDoc2VecClassification, "video_games")
