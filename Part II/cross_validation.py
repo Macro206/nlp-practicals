@@ -223,7 +223,7 @@ def findMostConfidentlyIncorrect(judgements):
 def testFuncOnAmazonDataset(func, dataset):
     amazonDocuments = getFeaturesForAllAmazonReviews(dataset)
     imdbTrainingSplits = roundRobinSplitting(getFeaturesForAllReviews())
-    imdbTrainingDocuments = [review for split in imdbTrainingSplits[1:] for review in split]
+    imdbTrainingDocuments = [review for split in imdbTrainingSplits for review in split]
 
     classificationResults = func(imdbTrainingDocuments, amazonDocuments)
 
@@ -308,6 +308,6 @@ print ""
 #
 # findMostConfidentlyIncorrect(judgements)
 
-compareSystemsOnAmazonDatasets(['office'])
+compareSystemsOnAmazonDatasets(amazon_datasets)
 
 #compareSystemsOnAmazonDataset(svm_classifier.performSVMClassification, doc2vec_classifier.performDoc2VecClassification, "video_games")

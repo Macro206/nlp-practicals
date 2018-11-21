@@ -4,7 +4,7 @@ import subprocess
 import os
 import shutil
 
-dataset_name = "Office_Products_5"
+dataset_name = "Amazon_Instant_Video_5"
 
 core_nlp_path = '/Users/Matteo/Downloads/stanford-corenlp-full-2018-10-05'
 

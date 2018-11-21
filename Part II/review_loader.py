@@ -14,7 +14,8 @@ amazon_datasets = {
     "video_games": "Video_Games_5",
     "food": "Grocery_and_Gourmet_Food_5",
     "musical_instruments": "Musical_Instruments_5",
-    "office": "Office_Products_5"
+    "office": "Office_Products_5",
+    "video": "Amazon_Instant_Video_5"
 }
 
 ### FUNCTIONS TO LOAD FILES INTO REQUIRED FORMAT ###
