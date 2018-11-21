@@ -8,6 +8,14 @@ options = {
     "shouldUseCutoffs": False,
 }
 
+amazon_datasets = {
+    "digital_music": "Digital_Music_5",
+    "gardening": "Patio_Lawn_and_Garden_5",
+    "video_games": "Video_Games_5",
+    "food": "Grocery_and_Gourmet_Food_5",
+    "musical_instruments": "Musical_Instruments_5"
+}
+
 ### FUNCTIONS TO LOAD FILES INTO REQUIRED FORMAT ###
 
 def getFeaturesFromFile(filePath):
@@ -63,9 +71,9 @@ def getFeaturesForAllReviews():
 
     return features
 
-def getFeaturesForAllAmazonReviews():
-    positiveDirPath = '/Users/Matteo/Desktop/amazon_test_data/POS'
-    negativeDirPath = '/Users/Matteo/Desktop/amazon_test_data/NEG'
+def getFeaturesForAllAmazonReviews(dataset):
+    positiveDirPath = '/Users/Matteo/Desktop/amazon_test_data/' + amazon_datasets[dataset] + '/POS'
+    negativeDirPath = '/Users/Matteo/Desktop/amazon_test_data/' + amazon_datasets[dataset] + '/NEG'
 
     positiveFileList = sorted(list(filter(lambda s: s.endswith(".conll"), os.listdir(positiveDirPath))))
     negativeFileList = sorted(list(filter(lambda s: s.endswith(".conll"), os.listdir(negativeDirPath))))

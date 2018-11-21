@@ -220,8 +220,8 @@ def findMostConfidentlyIncorrect(judgements):
 
     print(judgement)
 
-def testFuncOnAmazonDataset(func):
-    amazonDocuments = getFeaturesForAllAmazonReviews()
+def testFuncOnAmazonDataset(func, dataset):
+    amazonDocuments = getFeaturesForAllAmazonReviews(dataset)
     imdbTrainingSplits = roundRobinSplitting(getFeaturesForAllReviews())
     imdbTrainingDocuments = [review for split in imdbTrainingSplits[1:] for review in split]
 
@@ -238,9 +238,9 @@ def testFuncOnAmazonDataset(func):
 
     return classificationResults
 
-def compareSystemsOnAmazonDataset(func1, func2):
-    judgements1 = testFuncOnAmazonDataset(func1)
-    judgements2 = testFuncOnAmazonDataset(func2)
+def compareSystemsOnAmazonDataset(func1, func2, dataset):
+    judgements1 = testFuncOnAmazonDataset(func1, dataset)
+    judgements2 = testFuncOnAmazonDataset(func2, dataset)
 
     pValue = permutation_test.compareResults(judgements1, judgements2)
 
@@ -280,4 +280,5 @@ print ""
 #
 # findMostConfidentlyIncorrect(judgements)
 
-compareSystemsOnAmazonDataset(naive_bayes.naiveBayes, doc2vec_classifier.performDoc2VecClassification)
+options['shouldUsePresence'] = True
+compareSystemsOnAmazonDataset(svm_classifier.performSVMClassification, doc2vec_classifier.performDoc2VecClassification, "food")
