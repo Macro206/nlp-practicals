@@ -240,6 +240,7 @@ def testFuncOnAmazonDataset(func, dataset):
 
 def compareSystemsOnAmazonDataset(func1, func2, dataset):
     judgements1 = testFuncOnAmazonDataset(func1, dataset)
+    options['shouldUsePresence'] = True
     judgements2 = testFuncOnAmazonDataset(func2, dataset)
 
     pValue = permutation_test.compareResults(judgements1, judgements2)
@@ -292,7 +293,7 @@ print ""
 #print "-------"
 #print ""
 
-#compareSystems(naive_bayes.naiveBayes, doc2vec_classifier.performDoc2VecClassification)
+#compareSystems(svm_classifier.performSVMClassification, doc2vec_classifier.performDoc2VecClassification)
 #crossValidateDoc2Vec()
 
 #saveDoc2VecResults()
@@ -308,6 +309,6 @@ print ""
 #
 # findMostConfidentlyIncorrect(judgements)
 
-compareSystemsOnAmazonDatasets(amazon_datasets)
+#compareSystemsOnAmazonDatasets(amazon_datasets)
 
-#compareSystemsOnAmazonDataset(svm_classifier.performSVMClassification, doc2vec_classifier.performDoc2VecClassification, "video_games")
+compareSystemsOnAmazonDataset(naive_bayes.naiveBayes, svm_classifier.performSVMClassification, "video_games")
