@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.9.24)  22 NOV 2018 20:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.9.24)  23 NOV 2018 20:39
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -298,32 +298,28 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 [1
 
 {/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2] [3]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 135.
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2]
+[3]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
  [4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 135.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
  (./Part II Report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 135.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 135.
-
-
-Package rerunfilecheck Warning: File `"Part II Report".out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `"Part II Report".out':
-(rerunfilecheck)             Before: 29CD70B62F21A6408B0C1B319FD9D722;411
-(rerunfilecheck)             After:  F78669BF7D9C7AB72568E94EACF3F392;561.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 135.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 141.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
+Package rerunfilecheck Info: File `"Part II Report".out' has not changed.
+(rerunfilecheck)             Checksum: F78669BF7D9C7AB72568E94EACF3F392;561.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
  ) 
 Here is how much of TeX's memory you used:
- 5462 strings out of 492649
- 81361 string characters out of 6129622
- 179613 words of memory out of 5000000
- 9310 multiletter control sequences out of 15000+600000
+ 5465 strings out of 492649
+ 81404 string characters out of 6129622
+ 179616 words of memory out of 5000000
+ 9312 multiletter control sequences out of 15000+600000
  9145 words of font info for 33 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 28i,9n,32p,1064b,370s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 28i,9n,32p,638b,370s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
 /usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></u
@@ -331,10 +327,10 @@ sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/
 local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/loc
 al/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/loca
 l/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on "Part II Report.pdf" (4 pages, 91666 bytes).
+Output written on "Part II Report.pdf" (4 pages, 92219 bytes).
 PDF statistics:
- 104 PDF objects out of 1000 (max. 8388607)
- 90 compressed objects within 1 object stream
- 19 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 113 PDF objects out of 1000 (max. 8388607)
+ 99 compressed objects within 1 object stream
+ 20 named destinations out of 1000 (max. 500000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

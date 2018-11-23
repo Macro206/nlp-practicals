@@ -18,9 +18,9 @@
 
 \section{Introduction}
 
-The first aim here was to train a movie review sentiment classifier using Le and Mikolov's doc2vec in conjunction with an SVM library. I experimented with different doc2vec parameters to achieve as high accuracy as possible on a validation corpus, which I then discarded. I then compared its accuracy to that of my Naive Bayes classifier and SVM baselines.
+The first aim here was to train a movie review sentiment classifier using Le and Mikolov's doc2vec in conjunction with an SVM library. I tuned the parameters to get the best possible system, and then saw how it performed in comparison to my previous baselines.
 
-The second aim was to evaluate how these three systems generalised to reviews in different domains. When creating a machine learning classifier, we want it to have a high accuracy on the target domain; however, an interesting property is also how well it performs on other domains, especially when these might differ substantially in the language used. I was curious to see how each system performed on other types of review despite it being trained on the IMDB review corpus, and how the systems compared to each other in this respect.
+The second aim was to evaluate how these three systems generalised to reviews in different domains. When creating a machine learning classifier, an interesting property is how well it performs on domains it wasn't trained on, especially when these might differ substantially in the language used. I was curious to see how each system performed on other types of review despite it being trained on the IMDB review corpus, and how the systems compared to each other in this respect.
 
 \section{Method}
 
@@ -28,26 +28,28 @@ The second aim was to evaluate how these three systems generalised to reviews in
 
 For reference, my Naive Bayes implementation is very basic --- it uses unigrams and does no special processing of the input. My SVM implementation uses SVMlight \footnote{\url{https://pypi.org/project/svmlight/}} --- again, a very basic implementation, although I chose to use feature presence as opposed to frequency. This works by giving a feature a value of 1 if it appears in a given document, 0 otherwise.
 
-The doc2vec model was trained on 100,000 IMDB movie reviews \footnote{\url{http://ai.stanford.edu/~amaas/data/sentiment/}} --- doc2vec is a form of unsupervised machine learning, and hence sentiment tags were not included when passing in the feature (unigram) lists. I used document-level granularity here. Tokenisation was carried out with Stanford CoreNLP. \footnote{\url{https://stanfordnlp.github.io/CoreNLP/}}
+The doc2vec model was trained on 100,000 IMDB movie reviews, \footnote{\url{http://ai.stanford.edu/~amaas/data/sentiment/}} using document-level granularity. Tokenisation was carried out with Stanford CoreNLP \footnote{\url{https://stanfordnlp.github.io/CoreNLP/}}.
 
-Once the model was trained, I then continued in the standard SVM fashion --- I would convert each training document into a doc2vec vector representation, use these to train the SVM, and then do the same for the training documents and use the SVM to classify them.
+Once I had the doc2vec model, I would convert each training document into a doc2vec vector representation, use these to train the SVM, and then do the same for the test documents and use the SVM to classify them.
 
-The parameter tuning process involved taking my original 2000-review corpus and choosing 200 reviews as a validation corpus. The remaining 1800 reviews were used to train the SVM.
+The parameter tuning process involved taking my original 2000-review corpus and choosing 200 reviews as a validation corpus. The remaining 1800 reviews were used to train the SVM, and the validation corpus was later discarded.
 
-The optimisation process was carried out using a greedy local search strategy. I initially tried both doc2vec algorithms (distributed memory and distributed bag of words), saw which one had a higher accuracy, and then stuck to that one. I proceeded by tuning the model one parameter at a time, and then sticking with the best option out of those when optimising on the next parameter. This greedy algorithm is most probably not optimal, but given the sheer number of combinations of possible parameters, as well as the time it took to train each doc2vec model (4 minutes on average), I decided that this strategy was the most effective. One caveat is that there is some randomness in the doc2vec training process, meaning that re-training with the same data and parameters could produce different accuracies on the validation corpus. I did not have enough time to train each model multiple times and take a mean, so the data is rather noisy, but cross-validation after the tuning process confirms that the final chosen model is satisfactory.
+The optimisation process was carried out using a greedy local search strategy. I tuned the model one parameter at a time, and then stuck with the best option so far when optimising on the next parameter. This greedy algorithm is not optimal, but given the sheer number of combinations of possible parameters, I decided that this strategy was the most reasonable.
+
+One caveat is that re-training doc2vec with the same data and parameters could produce different accuracies on the validation corpus. I did not have enough time to train each model multiple times and take a mean, so the data is rather noisy, but cross-validation after the tuning process confirms that the final chosen model is satisfactory.
 
 All significance testing below is done using the Permutation Test with R = 5000 and a significance level of 5\% (unless mentioned otherwise).
 
 \subsection{Extending to different domains}
 
-For this section I decided to use a corpus of Amazon reviews, \footnote{\url{http://jmcauley.ucsd.edu/data/amazon/}} which is split into reviews of different categories --- I chose 7 of these (see below). I wrote code to interpret the JSON format and extract (rating, text) pairs for each review, select a random sample of 100 positive and 100 negative reviews from each category, and tokenise these into the required format. Plenty more reviews were available, but I chose to select small samples since the cross-validation I've been using up until this point has employed test folds of size 200. Another factor here was the running time --- small samples are desirable when dealing with classifiers that take long to run, particularly my doc2vec classifier.
+For this section I decided to use a corpus of Amazon reviews \footnote{\url{http://jmcauley.ucsd.edu/data/amazon/}} --- I chose 7 categories (see below). I wrote code to extract (rating, text) pairs for each review, select a random sample of 100 positive and 100 negative reviews from each category, and tokenise these into the required format. Plenty more reviews were available, but I chose to select small samples for the sake of comparability, since my cross-validation has always employed test folds of size 200.
 
 
 \section{Results}
 
 \subsection{Initial doc2vec model}
 
-The following is a table of accuracies of various doc2vec models. If a parameter name and its value are underlined, then it means that each entry that follows has that parameter set to that value if the parameter is omitted. In any other case, if a parameter is omitted, then its default value is used.
+The following is a table of accuracies of various doc2vec models. If a parameter name and its value are underlined, then that value was chosen for that parameter as part of the greedy local search (and persists when tuning subsequent parameters).
 
 \vspace{16px}
 
@@ -88,7 +90,7 @@ The following is a table of accuracies of various doc2vec models. If a parameter
 
 \subsection{Extending to different domains}
 
-The following is a table of the different classifiers' accuracies on the various amazon datasets.
+The following is a table of the different classifiers' accuracies on the various Amazon datasets.
 
 \vspace{16px}
 
@@ -112,20 +114,24 @@ Video Games & 62.5 & 64.0 & 75.0 \\ \hline
 
 \section{Analysis}
 
-The final doc2vec model I chose was \texttt{(dm=0, vector\char`_size=100, epochs=10, window=5, hs=0, negative=20)}. The initial two choices were quite clear. The accuracies when varying the number of epochs are closer together, although 10 yields the highest accuracy and is also the fastest to train. The remaining choices are not particularly interesting. However, one thing to note is that setting the ``negative'' parameter (which determines how many noise words are drawn in negative sampling) to 20 made the model take much longer to train, but the accuracy gain was so substantial that I made the decision to keep this value in my final model.
+The final doc2vec model I chose was \texttt{(dm=0, vector\char`_size=100, epochs=10, window=5, hs=0, negative=20)}; see the documentation for a description of each parameter's purpose. \footnote{\url{https://radimrehurek.com/gensim/models/doc2vec.html}} Most decisions were straightforward, but there were trade-offs: for example, setting the ``negative'' parameter (which determines how many noise words are drawn in negative sampling) to 20 made the model take much longer to train, but the accuracy gain was so substantial that I made the decision to keep this value in my final model.
 
-Performing cross-validation on the 1800-review corpus with this new doc2vec model yielded an accuracy of 89.1\%. There is indeed a significant difference between the original Naive Bayes baseline (with an accuracy of 81.2\%) and the new doc2vec classifier, as well as the original SVM baseline (with an accuracy of 80.7\%) and the doc2vec. The new classifier may be much slower than both baselines, but the gain in accuracy is really quite substantial.
+Performing 10-fold cross-validation on the 1800-review corpus with this new doc2vec model yielded an accuracy of 89.1\%. There is indeed a significant difference between each baseline compared to doc2vec (for reference, NB had 81.2\% accuracy and SVM had 80.7\% accuracy). The new classifier is actually much slower, but the gain in accuracy is substantial.
 
-Sheer accuracy isn't everything, however. Adaptability is a key concern as well --- I was curious to really push my systems by doing some tests on other types of review, to see how well they generalise. My hypothesis was that the systems should still perform well on video reviews --- indeed, doc2vec's performance is still a decent 84\%, although the other two systems were quite disappointing, especially Naive Bayes (which falls by a dramatic 15\%, although one must bear in mind that the samples are small and there is chance involved).
+Sheer accuracy isn't everything, however. My hypothesis was that the systems should still perform well on Amazon Instant Video reviews --- indeed, doc2vec's performance is 84\%, while the other two systems were quite disappointing, especially Naive Bayes (which falls by a dramatic 15\%, although one must bear in mind that the samples are small and there is chance involved).
 
-Digital music and video games are other forms of entertainment, and therefore one might expect the classifiers to perform reasonably well on them too. Digital music shows patterns very similar to those of the instant video, but video games show a harsher performance hit all round. In a way, music is also a passive form of entertainment, while video games are more active and users might be commenting on the gameplay as well as the story --- this is one of the many possible explanations for this discrepancy.
+Digital music and video games are other forms of entertainment, and therefore one might expect the classifiers to perform reasonably well on them too. Digital music shows patterns very similar to those of the instant video, but video games show a harsher performance hit all round. In a way, music is also a passive form of entertainment, while video games are more active and users might be commenting on the gameplay as well as the story.
 
-The other categories are just to try and test the limits of the classifiers --- I would expect the language used to be really quite different. And, incredibly, doc2vec's performance since seems to hover around 75\%, while the other classifiers perform far worse. Interestingly enough, there are no significant differences between Naive Bayes and SVM across any review category.
+The other categories are just to try and test the limits of the classifiers --- I would expect the language used to be really quite different. And, incredibly, doc2vec's performance seems to hover around 75\%, while the other classifiers perform far worse. Interestingly enough, there are no significant differences between Naive Bayes and SVM across any review category --- this hints at a potentially fundamental difference between bag-of-words- and word-embedding-based classifiers in terms of adaptability to new categories.
 
 
 \section{Conclusions}
 
-Overall, it would seem that doc2vec's approach is indeed much more sophisticated, and crucially, more adaptable than a simple bag-of-words model. After all, bag-of-words is inherently limited by the words it has been exposed to, and it is therefore no surprise that performance would suffer when tested on vastly different topics. However, doc2vec's resilience is quite impressive --- if given more time, it would have been interesting to investigate what doc2vec is really doing ``under the hood'', and how this allows it to get such high accuracies on language categories it hasn't encountered before.
+Overall, it would seem that doc2vec's approach is indeed much more sophisticated, and crucially, more adaptable than a simple bag-of-words model. After all, bag-of-words is inherently limited by the words it has been exposed to, and it is therefore no surprise that performance would suffer when tested on vastly different topics. However, doc2vec's resilience is quite impressive --- if given more time (and words), it would have been interesting to investigate what doc2vec is really doing ``under the hood'', and how this allows it to get such high accuracies on language categories it hasn't encountered before.
+
+\vspace{16px}
+
+[997 words using the TeXcount web service]
 
 \section{Appendix}
 

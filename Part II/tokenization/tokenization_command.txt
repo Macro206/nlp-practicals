@@ -1,0 +1,1 @@
+java -cp stanford-corenlp-3.9.2.jar edu.stanford.nlp.pipeline.StanfordCoreNLP -annotators tokenize,ssplit -filelist /Users/Matteo/Desktop/amazon_test_data/Musical_Instruments_5/positive_file_list.txt -outputFormat conll -output.columns word -outputDirectory /Users/Matteo/Desktop/amazon_test_data/Musical_Instruments_5/POS
