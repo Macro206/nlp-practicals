@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.9.24)  23 NOV 2018 20:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.9.24)  25 NOV 2018 17:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -313,24 +313,25 @@ Package rerunfilecheck Info: File `"Part II Report".out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 141.
  ) 
 Here is how much of TeX's memory you used:
- 5465 strings out of 492649
- 81404 string characters out of 6129622
+ 5466 strings out of 492649
+ 81415 string characters out of 6129622
  179616 words of memory out of 5000000
  9312 multiletter control sequences out of 15000+600000
  9145 words of font info for 33 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 28i,9n,32p,638b,370s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 28i,9n,32p,735b,370s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
-></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
-/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></u
-sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/
-local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/loc
-al/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/loca
-l/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on "Part II Report.pdf" (4 pages, 92219 bytes).
+></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><
+/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></u
+sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr
+/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/lo
+cal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local
+/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/
+texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on "Part II Report.pdf" (4 pages, 109101 bytes).
 PDF statistics:
- 113 PDF objects out of 1000 (max. 8388607)
- 99 compressed objects within 1 object stream
- 20 named destinations out of 1000 (max. 500000)
+ 120 PDF objects out of 1000 (max. 8388607)
+ 104 compressed objects within 2 object streams
+ 21 named destinations out of 1000 (max. 500000)
  81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

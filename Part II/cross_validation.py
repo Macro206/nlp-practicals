@@ -240,7 +240,6 @@ def testFuncOnAmazonDataset(func, dataset):
 
 def compareSystemsOnAmazonDataset(func1, func2, dataset):
     judgements1 = testFuncOnAmazonDataset(func1, dataset)
-    options['shouldUsePresence'] = True
     judgements2 = testFuncOnAmazonDataset(func2, dataset)
 
     pValue = permutation_test.compareResults(judgements1, judgements2)
@@ -287,7 +286,13 @@ print ""
 #print "-------"
 #print ""
 
-#crossValidateSVM()
+crossValidateSVM()
+
+for dataset in amazon_datasets:
+    print("")
+    print("")
+    print(dataset)
+    compareSystemsOnAmazonDataset(naive_bayes.naiveBayes, svm_classifier.performSVMClassification, dataset)
 
 #print ""
 #print "-------"
@@ -311,4 +316,4 @@ print ""
 
 #compareSystemsOnAmazonDatasets(amazon_datasets)
 
-compareSystemsOnAmazonDataset(naive_bayes.naiveBayes, svm_classifier.performSVMClassification, "video_games")
+#compareSystemsOnAmazonDataset(naive_bayes.naiveBayes, svm_classifier.performSVMClassification, "video_games")

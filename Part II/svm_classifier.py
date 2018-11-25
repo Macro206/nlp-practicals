@@ -26,10 +26,11 @@ def performSVMClassification(trainingData, testData):
         features = {}
 
         for f in doc[2]:
-            if options["shouldUsePresence"]:
-                features[f] = 1
-            else:
-                features[f] = 1 if f not in features else features[f] + 1
+            # if options["shouldUsePresence"]:
+            #     features[f] = 1
+            # else:
+            #     features[f] = 1 if f not in features else features[f] + 1
+            features[f] = 1  # Our baseline should use always use presence
 
         for k,v in features.items():
             featureVector.append((featureIndices[k],v))
@@ -48,7 +49,11 @@ def performSVMClassification(trainingData, testData):
         features = {}
 
         for f in doc[2]:
-            features[f] = 1 if f not in features else features[f] + 1
+            # if options["shouldUsePresence"]:
+            #     features[f] = 1
+            # else:
+            #     features[f] = 1 if f not in features else features[f] + 1
+            features[f] = 1  # Our baseline should use always use presence
 
         for k,v in features.items():
             featureVector.append((featureIndices[k],v))
